@@ -25,7 +25,8 @@ class _MyAppState extends State<MyApp> {
   var tab = 0;
   var result3 = [];
   var userImage;
-  var userContent =[];
+  var userContent;
+  var userName;
 
   addMyData() {
     var myData = {
@@ -33,18 +34,22 @@ class _MyAppState extends State<MyApp> {
     'image': userImage,
     'likes': 5,
     'date': 'July 25',
-    'content': userContent[0],
+    'content': userContent,
     'liked': false,
-    'user': userContent[1]
+    'user': userName
     };
     setState(() {
       result3.insert(0, myData);
     });
   }
 
-  setUserContent(a) {
+  setUserContent(a,int b) {
     setState(() {
-      userContent.add(a);
+      if (b == 0) {
+        userContent = a;
+      } else {
+        userName = a;
+      }
     });
   }
 
@@ -89,7 +94,8 @@ class _MyAppState extends State<MyApp> {
                   return Upload(
                       userImage: userImage,
                       setUserContent: setUserContent,
-                      addMyData:addMyData);
+                      addMyData:addMyData,
+                      userContent:userContent);
                 }));
               },
               icon: Icon(Icons.add_box_outlined)
@@ -160,16 +166,18 @@ class postSet extends StatelessWidget {
 }
 
 class Upload extends StatelessWidget {
- const Upload({Key? key,this.userImage,this.setUserContent,this.addMyData}) : super(key: key);
+ const Upload({Key? key,this.userImage,this.setUserContent,this.addMyData,this.userContent}) : super(key: key);
   final userImage;
   final setUserContent;
   final addMyData;
+  final userContent;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(actions: [
         IconButton(onPressed: (){
+          print(userContent);
           addMyData();
         },
             icon: Icon(Icons.send))
@@ -179,11 +187,11 @@ class Upload extends StatelessWidget {
         children: [
           Image.file(userImage),
           TextField(onChanged: (text) {
-             setUserContent(text);
+             setUserContent(text,0);
           },
           ),
           TextField(onChanged: (text) {
-            setUserContent(text);
+            setUserContent(text,1);
           },
           ),
 
